@@ -1,0 +1,142 @@
+#!/usr/bin/python
+
+import os
+import click
+from click_didyoumean import DYMGroup
+from pprint import pprint
+
+
+def header(filename, n):
+    result = ""
+
+    with open(filename, "r") as f:
+        for _ in range(n):
+            result += f.readline()
+
+    return result
+
+
+@click.group(cls=DYMGroup)
+@click.option("--folder", default=".", type=click.Path(exists=True))
+@click.pass_context
+def cli(ctx, folder):
+    ctx.obj['folder'] = folder
+    ctx.obj['file_lists'] = analyse(folder)
+
+
+@cli.command()
+@click.pass_context
+def stats(ctx):
+    counters = ctx.obj['file_lists']
+    copyright_stats = {}
+    for name, stuff in counters.items():
+        copyright_stats[name] = len(stuff)
+
+        for file_name in stuff:
+            if file_name in counters['copyright']:
+                copyright_stats[name] -= 1
+
+    for counter, file_list in counters.items():
+        color = 'green' if copyright_stats[counter] == 0 else 'yellow'
+        click.secho("%10s : %4i (%4i without copyright)" % \
+                    (counter,
+                     len(file_list),
+                     copyright_stats[counter]
+                     ), fg=color)
+
+
+@cli.command()
+@click.pass_context
+def lists(ctx):
+    counters = ctx.obj['file_lists']
+    for counter, file_list in counters.items():
+        if counter == "total":
+            continue
+        click.secho(counter + ": ", fg="yellow")
+        pprint(file_list)
+
+
+@cli.command()
+@click.option('--type', '--filetype', default='all')
+@click.pass_context
+def headers(ctx, filetype):
+    counters = ctx.obj['file_lists']
+
+    def print_headers(counter, data, copyright=[]):
+        click.secho("=" * 34 + " %9s " % (counter) + "=" * 34, fg='green')
+
+        for filename in data:
+            if filename in copyright:
+                color = 'green'
+            else:
+                color = 'yellow'
+            click.secho('{:*^79}'.format(" " + str(filename)[-50:] + " "),
+                        fg=color)
+            print(header(filename, 10))
+
+    copyright = counters['copyright']
+
+    if filetype == 'all':
+        for counter, file_list in counters.items():
+            if counter == "total":
+                continue
+            print_headers(counter, file_list, copyright)
+    else:
+        print_headers(filetype, counters[filetype], copyright)
+
+
+def analyse(folder):
+    file_lists = {
+        'total': [],
+        'shebang': [],
+        'docstring': [],
+        'empty': [],
+        'hash': [],
+        'unknown': [],
+        'imports': [],
+        'copyright': []
+    }
+
+    ignores = ['pycache', '.pyc']
+
+    # traverse root directory, and list directories as dirs and files as files
+    for root, dirs, files in os.walk(folder):
+        path = root.split(os.sep)
+        # print((len(path) - 1) * '---', os.path.basename(root))
+        for file in files:
+            for ignore in ignores:
+                if ignore in file:
+                    continue
+            if file.endswith(".py"):
+                # print(len(path) * '---', file)
+                filename = os.path.join("/".join(path), file)
+                # print(path, file)
+
+                with open(filename, "r") as f:
+                    content = f.read()
+                    # print(content)
+
+                    if "copyright" in content:
+                        file_lists['copyright'].append(filename)
+
+                    if content.startswith('"""'):
+                        file_lists['docstring'].append(filename)
+                    elif content.startswith('import') or \
+                            content.startswith('from'):
+                        file_lists['imports'].append(filename)
+                    elif content.startswith('#!/'):
+                        file_lists['shebang'].append(filename)
+                    elif content == "" or content.isspace():
+                        file_lists['empty'].append(filename)
+                    elif content.startswith('# '):
+                        file_lists['hash'].append(filename)
+                    else:
+                        file_lists['unknown'].append(filename)
+
+                file_lists['total'].append(filename)
+
+    return file_lists
+
+
+if __name__ == "__main__":
+    cli(obj={})

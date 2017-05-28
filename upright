@@ -41,12 +41,24 @@ def header(filename, n):
 @click.group(cls=DYMGroup)
 @click.option("--folder", default=".", type=click.Path(exists=True),
               help="Specify a folder to operate on")
+@click.option('--type', '--filetype', default='all',
+              help='Select only a specified file classification')
 @click.pass_context
-def cli(ctx, folder):
+def cli(ctx, folder, filetype):
     """Upright - a sourcecode copyright maintenance tool"""
 
     ctx.obj['folder'] = folder
-    ctx.obj['file_lists'] = analyse(folder)
+    ctx.obj['file_type'] = filetype
+
+    all_types = analyse(folder)
+
+    if filetype == 'all':
+        types = all_types
+    else:
+        types = {filetype: all_types[filetype]}
+
+    ctx.obj['file_lists'] = types
+    ctx.obj['copyright'] = all_types['copyright']
 
 
 @cli.command()
@@ -55,12 +67,13 @@ def stats(ctx):
     """Generate various statistics about source files"""
 
     counters = ctx.obj['file_lists']
+    copyright = ctx.obj['copyright']
     copyright_stats = {}
     for name, stuff in counters.items():
         copyright_stats[name] = len(stuff)
 
         for file_name in stuff:
-            if file_name in counters['copyright']:
+            if file_name in copyright:
                 copyright_stats[name] -= 1
 
     for counter, file_list in counters.items():
@@ -86,12 +99,11 @@ def lists(ctx):
 
 
 @cli.command()
-@click.option('--type', '--filetype', default='all',
-              help='Select only a specified file classification')
 @click.pass_context
-def headers(ctx, filetype):
+def headers(ctx):
     """Show headers of source files by classification"""
 
+    copyright = ctx.obj['copyright']
     counters = ctx.obj['file_lists']
 
     def print_headers(counter, data, copyright=[]):
@@ -106,15 +118,24 @@ def headers(ctx, filetype):
                         fg=color)
             print(header(filename, 10))
 
-    copyright = counters['copyright']
+    for counter, file_list in counters.items():
+        if counter == "total":
+            continue
+        print_headers(counter, file_list, copyright)
 
-    if filetype == 'all':
-        for counter, file_list in counters.items():
-            if counter == "total":
-                continue
-            print_headers(counter, file_list, copyright)
-    else:
-        print_headers(filetype, counters[filetype], copyright)
+
+@cli.group()
+@click.option('--template', '-t', help='Use specified template file')
+@click.pass_context
+def template_group(ctx, template):
+    ctx.obj['template'] = template
+
+@cli.command()
+@click.option('--line', '-l', help='Insert on specified line number')
+@click.pass_context
+def insert(ctx, line):
+    pass
+
 
 
 def analyse(folder):

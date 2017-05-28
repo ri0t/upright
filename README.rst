@@ -1,17 +1,17 @@
 .. image:: https://travis-ci.org/ri0t/upright.svg?branch=master
-:target: https://travis-ci.org/ri0t/upright
+    :target: https://travis-ci.org/ri0t/upright
     :alt: Build Status
 
 .. image:: https://landscape.io/github/ri0t/upright/master/landscape.svg?style=flat
-:target: https://landscape.io/github/ri0t/upright/master
+    :target: https://landscape.io/github/ri0t/upright/master
     :alt: Quality
 
 .. image:: https://coveralls.io/repos/ri0t/upright/badge.svg
-:target: https://coveralls.io/r/ri0t/upright
+    :target: https://coveralls.io/r/ri0t/upright
     :alt: Coverage
 
 .. image:: https://requires.io/github/ri0t/upright/requirements.svg?branch=master
-:target: https://requires.io/github/ri0t/upright/requirements/?branch=master
+    :target: https://requires.io/github/ri0t/upright/requirements/?branch=master
     :alt: Requirements Status
 
 

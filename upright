@@ -1,4 +1,26 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Upright - A sourcecode copyright maintenance tool
+
+Application
+===========
+
+See README.rst for Build/Installation and setup details.
+
+URLs & Contact
+==============
+
+Mail: riot@c-base.org
+
+Project repository: http://github.com/ri0t/upright
+
+"""
+
+__author__ = "Heiko 'riot' Weinen <riot@c-base.org>"
+__copyright__ = "Copyright (C) Heiko 'riot' Weinen"
+__license__ = "GPLv3, see LICENSE"
 
 import os
 import click
@@ -17,9 +39,12 @@ def header(filename, n):
 
 
 @click.group(cls=DYMGroup)
-@click.option("--folder", default=".", type=click.Path(exists=True))
+@click.option("--folder", default=".", type=click.Path(exists=True),
+              help="Specify a folder to operate on")
 @click.pass_context
 def cli(ctx, folder):
+    """Upright - a sourcecode copyright maintenance tool"""
+
     ctx.obj['folder'] = folder
     ctx.obj['file_lists'] = analyse(folder)
 
@@ -27,6 +52,8 @@ def cli(ctx, folder):
 @cli.command()
 @click.pass_context
 def stats(ctx):
+    """Generate various statistics about source files"""
+
     counters = ctx.obj['file_lists']
     copyright_stats = {}
     for name, stuff in counters.items():
@@ -48,6 +75,8 @@ def stats(ctx):
 @cli.command()
 @click.pass_context
 def lists(ctx):
+    """Generate lists of source files by classification"""
+
     counters = ctx.obj['file_lists']
     for counter, file_list in counters.items():
         if counter == "total":
@@ -57,9 +86,12 @@ def lists(ctx):
 
 
 @cli.command()
-@click.option('--type', '--filetype', default='all')
+@click.option('--type', '--filetype', default='all',
+              help='Select only a specified file classification')
 @click.pass_context
 def headers(ctx, filetype):
+    """Show headers of source files by classification"""
+
     counters = ctx.obj['file_lists']
 
     def print_headers(counter, data, copyright=[]):
@@ -86,6 +118,8 @@ def headers(ctx, filetype):
 
 
 def analyse(folder):
+    """Collect statistics and classify source code files"""
+
     file_lists = {
         'total': [],
         'shebang': [],

@@ -15,17 +15,19 @@
     :alt: Requirements Status
 
 
-Upright - A (Python) copyright update tool
-==========================================
+Upright - A sourcecode copyright maintenance tool
+=================================================
 
 This tool aims to support you in keeping your sourcecode copyright notices
 up to date.
 
+Right now, the tool focuses on Python code.
+
 It analyses the headers of any given file tree to
 
 - first sort the various styles you have
-- checks if any found copyright matches a template you supplied
-- updates various fields (mostly the year)
+- check if any found copyright matches a template you supplied
+- update various fields (mostly the year)
 
 Howto
 =====

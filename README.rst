@@ -1,33 +1,24 @@
-.. image:: https://travis-ci.org/ri0t/upright.svg?branch=master
-    :target: https://travis-ci.org/ri0t/upright
-    :alt: Build Status
-
-.. image:: https://landscape.io/github/ri0t/upright/master/landscape.svg?style=flat
-    :target: https://landscape.io/github/ri0t/upright/master
-    :alt: Quality
-
-.. image:: https://coveralls.io/repos/ri0t/upright/badge.svg
-    :target: https://coveralls.io/r/ri0t/upright
-    :alt: Coverage
-
-.. image:: https://requires.io/github/ri0t/upright/requirements.svg?branch=master
-    :target: https://requires.io/github/ri0t/upright/requirements/?branch=master
-    :alt: Requirements Status
-
-
 Upright - A sourcecode copyright maintenance tool
 =================================================
 
 This tool aims to support you in keeping your sourcecode copyright notices
 up to date.
 
-Right now, the tool focuses on Python code.
+Right now, the tool focuses on Python code, but a lot of functionality is
+very language independent. You could probably update copyright notices in svg
+files or similar.
 
-It analyses the headers of any given file tree to
+It analyses the headers of any given file tree to aid in fixing copyright issues.
 
-- first sort the various styles you have
+Among those aids are:
+
+- sorting and overviewing various copyright styles
+  Sometimes copyright notices are in docstrings. Sometimes, they're in comments, etc.
 - check if any found copyright matches a template you supplied
+- extract stats about outliers
+- show headers of fishy files
 - update various fields (mostly the year)
+- insert templates
 
 Howto
 =====
@@ -36,6 +27,9 @@ Just supply a folder or run the tool in your destination folder.
 It will only ever write to your files if you supply the "--write" flag.
 
 Discover more options etc by looking at the tool's --help page.
+
+The command line interface has subgroups like `template` which have further sub-
+commands listed. To get at them invoke it like `upright template --help` etc.
 
 Bugs & Discussion
 =================
@@ -63,7 +57,7 @@ Code
 License
 =======
 
-Copyright (C) 2017 riot <riot@c-base.org>.
+Copyright (C) 2017-2020 riot <riot@c-base.org>.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

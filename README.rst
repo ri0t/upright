@@ -1,3 +1,13 @@
+Happy new year!
+===============
+
+You're probably (hopefully) looking at this in early January, because it's time
+to update your copyright again, so have a good new year.
+
+If not, maybe it's time to update your license text or your author's mail address?
+
+Here it comes:
+
 Upright - A sourcecode copyright maintenance tool
 =================================================
 
@@ -12,7 +22,7 @@ It analyses the headers of any given file tree to aid in fixing copyright issues
 
 Among those aids are:
 
-- sorting and overviewing various copyright styles
+- sorting and overviewing various copyright styles.
   Sometimes copyright notices are in docstrings. Sometimes, they're in comments, etc.
 - check if any found copyright matches a template you supplied
 - extract stats about outliers
@@ -26,10 +36,13 @@ Howto
 Just supply a folder or run the tool in your destination folder.
 It will only ever write to your files if you supply the "--write" flag.
 
-Discover more options etc by looking at the tool's --help page.
+Discover more options and operations by looking at the tool's --help page.
 
 The command line interface has subgroups like `template` which have further sub-
 commands listed. To get at them invoke it like `upright template --help` etc.
+
+Maybe in 2021, I'll put up some more documentation. And a test suite.
+And... aah... I sure hope i got you in the first half.
 
 Bugs & Discussion
 =================

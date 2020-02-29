@@ -3,7 +3,7 @@
 
 # Upright - A sourcecode copyright maintenance tool
 # =================================================
-# Copyright (C) 2017 riot <riot@c-base.org>
+# Copyright (C) 2017-2020 riot <riot@c-base.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ import os
 setup(
     name="upright",
     description="A sourcecode copyright maintenance tool",
-    version="0.0.1",
+    version="0.0.2",
     author="Heiko 'riot' Weinen",
     author_email="riot@c-base.org",
     maintainer="Heiko 'riot' Weinen",
